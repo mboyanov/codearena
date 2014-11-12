@@ -2,6 +2,7 @@ import sys
 from socket import *
 from json import dumps
 from json import loads
+from tiles.Unit import Unit
 sHostName   = u"codearena.eu"  # host that we want to connect to
 nPortNumber = 7654 # port
 
@@ -26,6 +27,7 @@ client.send(dumps(login_dict)) # xml sending
 xmlResponse = client.recv(nBufferSize) # getting the response from the server
 print xmlResponse 
 xmlResponses=xmlResponse.split( '\n')
+print xmlResponses
 response=loads(xmlResponses[0])
 if not response['status'] == 'GAME_READY': 
 # xml does not have the GAME_READY message. We connected but something has gone wrong and we cannot login
@@ -33,7 +35,10 @@ if not response['status'] == 'GAME_READY':
    sys.exit() # leaving the programm 
 else:
    print "LogedIn!" # we are logged in and can send commends for our bot
-   print xmlResponse # showing the xml answer 
+   print xmlResponses[1]
+   unit = Unit(loads(xmlResponses[1])['unit'])
+
+   print unit.id # showing the xml answer
 
 # further part of the programm, where we will control our bot and send other xml commends
 
